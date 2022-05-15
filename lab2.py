@@ -116,5 +116,5 @@ def p_error(p):
 parser = yacc()
 
 # Parse an expression
-ast = parser.parse('2 * 3 + 4 * (5 - x)')
-print(ast)
+ans = parser.parse('2 * 3 + 4 * (5 - x)')
+print(ans)
