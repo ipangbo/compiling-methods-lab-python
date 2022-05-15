@@ -1,15 +1,10 @@
-# ----------------------------------------------------------------------
-# clex.py
-#
-# A lexer for ANSI C.
-# ----------------------------------------------------------------------
-
 import sys
-sys.path.insert(0, "../..")
-
 import src.lex as lex
 
-# Reserved words
+sys.path.insert(0, "../..")
+
+
+# C语言保留字
 reserved = (
     'AUTO', 'BREAK', 'CASE', 'CHAR', 'CONST', 'CONTINUE', 'DEFAULT', 'DO', 'DOUBLE',
     'ELSE', 'ENUM', 'EXTERN', 'FLOAT', 'FOR', 'GOTO', 'IF', 'INT', 'LONG', 'REGISTER',
@@ -54,12 +49,14 @@ tokens = reserved + (
 # Completely ignored characters
 t_ignore = ' \t\x0c'
 
+
 # Newlines
 
 
 def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
+
 
 # Operators
 t_PLUS = r'\+'
@@ -132,6 +129,7 @@ def t_ID(t):
     t.type = reserved_map.get(t.value, "ID")
     return t
 
+
 # Integer literal
 t_ICONST = r'\d+([uU]|[lL]|[uU][lL]|[lL][uU])?'
 
@@ -144,12 +142,14 @@ t_SCONST = r'\"([^\\\n]|(\\.))*?\"'
 # Character constant 'c' or L'c'
 t_CCONST = r'(L)?\'([^\\\n]|(\\.))*?\''
 
+
 # Comments
 
 
 def t_comment(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
+
 
 # Preprocessor directive (ignored)
 
@@ -162,6 +162,7 @@ def t_preprocessor(t):
 def t_error(t):
     print("Illegal character %s" % repr(t.value[0]))
     t.lexer.skip(1)
+
 
 lexer = lex.lex()
 if __name__ == "__main__":
