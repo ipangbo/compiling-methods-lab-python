@@ -3,11 +3,7 @@ import types
 import sys
 import inspect
 
-# -----------------------------------------------------------------------------
-#                     === User configurable parameters ===
-#
-# Change these to modify the default behavior of yacc (if you wish)
-# -----------------------------------------------------------------------------
+# 可变参数
 
 yaccdebug = False  # Debugging mode.  If set, yacc generates a
 # a 'parser.out' file in the current directory
@@ -18,12 +14,6 @@ resultlimit = 40  # Size limit of results when running in debug mode.
 
 MAXINT = sys.maxsize
 
-
-# This object is a stand-in for a logging object created by the
-# logging module.   PLY will use this by default to create things
-# such as the parser.out file.  If a user wants more detailed
-# information, they can create their own logging object and pass
-# it into PLY.
 
 class PlyLogger(object):
     def __init__(self, f):
@@ -43,7 +33,7 @@ class PlyLogger(object):
     critical = debug
 
 
-# Null logger is used when no output is generated. Does nothing.
+# 无输出
 class NullLogger(object):
     def __getattribute__(self, name):
         return self
@@ -52,7 +42,7 @@ class NullLogger(object):
         return self
 
 
-# Exception raised for yacc-related errors
+# 错误处理，直接放行
 class YaccError(Exception):
     pass
 
@@ -79,13 +69,7 @@ def format_stack_entry(r):
         return '<%s @ 0x%x>' % (type(r).__name__, id(r))
 
 
-# -----------------------------------------------------------------------------
-#                        ===  LR Parsing Engine ===
-#
-# The following classes are used for the LR parser itself.  These are not
-# used during table construction and are independent of the actual LR
-# table generation algorithm
-# -----------------------------------------------------------------------------
+# LR分析部分
 
 # This class is used to hold non-terminal grammar symbols during parsing.
 # It normally has the following attributes set:
@@ -163,12 +147,6 @@ class YaccProduction:
         raise SyntaxError
 
 
-# -----------------------------------------------------------------------------
-#                               == LRParser ==
-#
-# The LR Parsing engine.
-# -----------------------------------------------------------------------------
-
 class LRParser:
     def __init__(self, lrtab, errorf):
         self.productions = lrtab.lr_productions
@@ -207,13 +185,7 @@ class LRParser:
     def disable_defaulted_states(self):
         self.defaulted_states = {}
 
-    # parse().
-    #
-    # This is the core parsing engine.  To operate, it requires a lexer object.
-    # Two options are provided.  The debug flag turns on debugging so that you can
-    # see the various rule reductions and parsing steps.  tracking turns on position
-    # tracking.  In this mode, symbols will record the starting/ending line number and
-    # character index.
+    # **解析操作**
 
     def parse(self, input=None, lexer=None, debug=False, tracking=False):
         # If debugging has been specified as a flag, turn it into a logging object
